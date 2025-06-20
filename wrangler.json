@@ -1,0 +1,35 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "better-t3-stack",
+	"compatibility_date": "2025-05-05",
+    "compatibility_flags": ["nodejs_compat"],
+	"minify": true,
+	"main": "./server/index.ts",
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		"NODE_ENV": "production",
+		"BUN_VERSION": "1.2.15"
+	},
+	"assets": {
+		"directory": "out",
+		"binding": "ASSETS",
+		"html_handling": "auto-trailing-slash"
+	},
+	"send_metrics": false,
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "better-t3-stack"
+		}
+	],
+	"d1_databases": [
+        {
+            "binding": "DATABASE",
+            "database_name": "better-t3-stack",
+            "database_id": "<ID>",
+            "migrations_dir": "drizzle"
+        }
+    ]
+}
