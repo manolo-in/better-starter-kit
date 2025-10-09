@@ -29,19 +29,9 @@ export const createAuth = (db: CreatedDB) =>
         clientSecret: env.GOOGLE_CLIENT_SECRET,
       },
     },
-    plugins: [
-      // magicLink({
-      //     sendMagicLink: async ({ email, token, url }, request) => {
-      //         await c.var.email({
-      //             to: email,
-      //             subject: "Magic Link for App",
-      //             html: `<a href="${url}">Click here to login</a>`,
-      //         });
-      //     },
-      // }),
-    ],
+    plugins: [],
   });
 
 export type AUTH = ReturnType<typeof createAuth>;
 export type USER = typeof schema.user.$inferSelect;
-export type FULLSESSION = AUTH["$Infer"]["Session"];
+export type SESSION = AUTH["$Infer"]["Session"];

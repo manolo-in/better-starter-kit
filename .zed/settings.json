@@ -1,0 +1,45 @@
+// https://zed.dev/docs/configuring-zed#settings-files
+{
+  "tab_size": 4,
+  "auto_install_extensions": {
+    "html": true,
+    "tsgo": true,
+    "sql": true,
+    "scss": true,
+    "biome": true,
+    "env": true,
+    "react-typescript-snippets": true,
+    "typescript-snippets": true,
+  },
+  "language_servers": ["tailwindcss-language-server"],
+	"languages": {
+		"TSX": {
+			"language_servers": ["tsgo", "vtsls", "tailwindcss-language-server"],
+			"formatter": "language_server"
+		},
+		"JavaScript": {
+			"language_servers": ["tsgo", "vtsls"],
+			"formatter": "prettier"
+		},
+		"TypeScript": {
+			"language_servers": ["tsgo", "vtsls"],
+			"formatter": "prettier"
+		}
+	},
+	"lsp": {
+		"biome": {
+			"settings": {
+				"require_config_file": true
+			}
+		}
+	},
+	"formatter": {
+		"language_server": {
+			"name": "biome"
+		}
+	},
+	"code_actions_on_format": {
+		"source.fixAll.biome": true,
+		"source.organizeImports.biome": true
+	}
+}
