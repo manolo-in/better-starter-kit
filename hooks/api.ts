@@ -1,10 +1,10 @@
-import { env } from "@/env";
 import type { AppRouter } from "@/server/api";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { RouterClient } from "@orpc/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
+import { env } from "env";
 import { toast } from "sonner";
 
 export const queryClient = new QueryClient({
@@ -26,10 +26,10 @@ const baseUrl =
     env.NEXT_PUBLIC_SERVER_URL ??
     (typeof window !== "undefined"
         ? window.location.origin
-        : "http://localhost:3000");
+        : "http://localhost:4000");
 
 export const link = new RPCLink({
-    url: `${baseUrl}/api/rpc`,
+    url: `${baseUrl}/api`,
     fetch(url, options) {
         return fetch(url, {
             ...options,

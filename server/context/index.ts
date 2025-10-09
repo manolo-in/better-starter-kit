@@ -1,36 +1,39 @@
-import { createMiddleware } from "hono/factory";
-import { createAuth } from "./auth";
+import type { HonoType } from "@/server";
+import { createDB } from "@/server/db";
 import type { Context } from "hono";
-import { createDB, type DATABASE } from "@/server/db";
-import type { BUCKET } from "./bucket";
+import { createMiddleware } from "hono/factory";
+import { createAuth } from "@/server/auth";
 
 export const resolvePath = createMiddleware(async (c, next) => {
-    if (c.req.path.includes("//")) {
-        return c.redirect(c.req.path.replaceAll(/\/+/g, "/"));
-    }
-    await next();
+  if (c.req.path.includes("//")) {
+    return c.redirect(c.req.path.replaceAll(/\/+/g, "/"));
+  }
+  await next();
+});
+
+export const cloudflare = createMiddleware<HonoType>(async (c, next) => {
+  const db = createDB(c.env.DATABASE);
+  const auth = createAuth(db);
+
+  c.set("auth", auth);
+  c.set("db", db);
+
+  await next();
 });
 
 export async function createContext(c: Context<HonoType>) {
-    const db = createDB(c.env.DATABASE);
-    const auth = createAuth(db)
+  const db = c.get("db");
+  const auth = c.get("auth");
 
-    const session = await auth.api.getSession({
-        headers: c.req.raw.headers,
-    });
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
-    return {
-        session,
-        db,
-        auth
-    };
+  return {
+    db,
+    auth,
+    session,
+    // chat: c.env.CHAT,
+    req: c.req.raw,
+  };
 }
 
-type Bindings = {
-    DATABASE: DATABASE;
-    BUCKET: BUCKET;
-};
-
-export type HonoType = { Bindings: Bindings; Variables: {} };
-
-export type ContextORPC = Awaited<ReturnType<typeof createContext>>;
+// export type ContextORPC = Awaited<ReturnType<typeof createContext>>;

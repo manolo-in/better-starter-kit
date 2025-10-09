@@ -1,14 +1,16 @@
-import { env } from "@/env";
-import type { AuthType } from "@/server/context/auth";
+import type { AUTH } from "@/server/auth";
 import { createAuthClient } from "better-auth/client";
 import {
     inferAdditionalFields,
     magicLinkClient,
 } from "better-auth/client/plugins";
+import { env } from "env";
 
-export const authClient = createAuthClient({
-    plugins: [magicLinkClient(), inferAdditionalFields<AuthType>()],
+export const authConfig = {
+    plugins: [magicLinkClient(), inferAdditionalFields<AUTH>()],
     ...(env.NEXT_PUBLIC_SERVER_URL
         ? { baseURL: env.NEXT_PUBLIC_SERVER_URL }
         : {}),
-});
+};
+
+export const authClient = createAuthClient(authConfig);

@@ -1,7 +1,10 @@
-import * as authSchema from "./auth"
+import { user, account, verification, session } from "./auth";
 
 export const schema = {
-    ...authSchema
-}
+    user,
+    account,
+    verification,
+    session,
+} as const;
 
-export type SchemaType = typeof schema
+export type SchemaType = typeof schema;

@@ -24,12 +24,14 @@
 			"bucket_name": "better-t3-stack"
 		}
 	],
-	"d1_databases": [
-        {
-            "binding": "DATABASE",
+    "d1_databases": [
+		{
+		    "binding": "DATABASE",
             "database_name": "better-t3-stack",
             "database_id": "<ID>",
             "migrations_dir": "drizzle"
-        }
-    ]
+			"preview_database_id": "<ID>",
+			"remote": true,
+		}
+	],
 }
