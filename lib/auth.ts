@@ -1,5 +1,5 @@
 import type { AUTH } from "@/server/auth";
-import { createAuthClient } from "better-auth/client";
+import { createAuthClient, type ClientOptions } from "better-auth/client";
 import { inferAdditionalFields } from "better-auth/client/plugins";
 import { env } from "env";
 
@@ -8,6 +8,6 @@ export const authConfig = {
   ...(env.NEXT_PUBLIC_SERVER_URL
     ? { baseURL: env.NEXT_PUBLIC_SERVER_URL }
     : {}),
-};
+} satisfies ClientOptions;
 
 export const authClient = createAuthClient(authConfig);

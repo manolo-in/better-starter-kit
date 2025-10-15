@@ -12,6 +12,8 @@ export const resolvePath = createMiddleware(async (c, next) => {
 });
 
 export const cloudflare = createMiddleware<HonoType>(async (c, next) => {
+  if (!c.env.DATABASE) throw new Error("Not Cloudflare");
+
   const db = createDB(c.env.DATABASE);
   const auth = createAuth(db);
 
