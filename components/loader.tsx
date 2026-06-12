@@ -1,9 +1,15 @@
-import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Loader2Icon } from "lucide-react";
 
-export default function Loader() {
-  return (
-    <div className="flex h-full items-center justify-center pt-8">
-      <Loader2 className="animate-spin" />
-    </div>
-  );
+export default function ({ className }: { className?: string }) {
+	return (
+		<div
+			className={cn(
+				"flex h-full w-full items-center justify-center",
+				className,
+			)}
+		>
+			<Loader2Icon className="animate-spin" />
+		</div>
+	);
 }

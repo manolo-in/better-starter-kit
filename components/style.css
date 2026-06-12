@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source not "../server/email/";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -131,4 +133,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.markdown li {
+   input[type="checkbox"] {
+      color-scheme: light;
+   }
 }

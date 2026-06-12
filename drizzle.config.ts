@@ -5,11 +5,13 @@ import { z } from "zod";
 
 const env = createEnv({
     server: {
+    	// DATABASE_URL_DIRECT: z.string(),
         CLOUDFLARE_ACCOUNT_ID: z.string(),
         CLOUDFLARE_DATABASE_ID: z.string(),
         CLOUDFLARE_D1_TOKEN: z.string(),
     },
     runtimeEnv: {
+    	// DATABASE_URL_DIRECT: process.env.DATABASE_URL_DIRECT,
         CLOUDFLARE_ACCOUNT_ID: process.env.CLOUDFLARE_ACCOUNT_ID,
         CLOUDFLARE_DATABASE_ID: process.env.CLOUDFLARE_DATABASE_ID,
         CLOUDFLARE_D1_TOKEN: process.env.CLOUDFLARE_D1_TOKEN,

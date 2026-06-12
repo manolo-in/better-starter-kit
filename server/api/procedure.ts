@@ -1,43 +1,60 @@
+import { tryAsync } from "@/lib/tools";
 import type { AUTH } from "@/server/auth";
-import type { DATABASE } from "@/server/db";
+import type { CreatedDB } from "@/server/db";
 import { ORPCError, type ORPCErrorCode } from "@orpc/client";
 import { os } from "@orpc/server";
 
-type ContextORPC = {
-  db: DATABASE;
-  auth: AUTH;
-  session: AUTH["$Infer"]["Session"] | null;
-  req: Request;
+export type StaticContextORPC = {
+	db: CreatedDB;
+	auth: AUTH;
+	req: Request;
+	waitUntil: WaitUntil;
 };
 
-const getError = (
-  code: ORPCErrorCode = "INTERNAL_SERVER_ERROR",
-  message?: string,
-  cause?: unknown,
+export const getError = (
+	code: ORPCErrorCode = "INTERNAL_SERVER_ERROR",
+	message?: string,
+	cause?: unknown,
 ) => {
-  cause && console.error(cause);
-  return new ORPCError(code, {
-    message: message ?? "Something wrong",
-    cause,
-  });
+	cause && console.error(cause);
+	return new ORPCError(code, {
+		message: message ?? "Something wrong",
+		cause,
+	});
 };
 
-export const o = os.$context<ContextORPC>();
+export const handleError = (error: Error, message: string = "1") => {
+	return getError(
+		"INTERNAL_SERVER_ERROR",
+		`INTERNAL_SERVER_ERROR - ${message}`,
+		error,
+	);
+};
 
-export const publicProcedure = o;
+export const publicProcedure = os.$context<StaticContextORPC>();
 
-const requireAuth = o.middleware(async ({ context, next }) => {
-  if (!context.session?.user)
-    throw getError(
-      "UNAUTHORIZED",
-      "You are not authorized to access this action",
-    );
+export const protectedProcedure = publicProcedure.use(
+	async ({ context, next }) => {
+		const [error, session] = await tryAsync(
+			context.auth.api.getSession({
+				headers: context.req.headers,
+			}),
+		);
 
-  return next({
-    context: {
-      session: context.session,
-    },
-  });
-});
+		if (error)
+			throw getError("INTERNAL_SERVER_ERROR", "Failed to retrieve session");
 
-export const protectedProcedure = publicProcedure.use(requireAuth);
+		if (!session?.user)
+			throw getError(
+				"UNAUTHORIZED",
+				"You are not authorized to access this action",
+			);
+
+		return next({
+			context: {
+				session: session,
+				user: session.user,
+			},
+		});
+	},
+);

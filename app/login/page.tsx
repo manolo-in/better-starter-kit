@@ -6,11 +6,11 @@ import { useState } from "react";
 
 
 export default function LoginPage() {
-  const [showSignIn, setShowSignIn] = useState(false);
+	const [showSignIn, setShowSignIn] = useState(false);
 
-  return showSignIn ? (
-    <SignInForm onSwitchToSignUp={() => setShowSignIn(false)} />
-  ) : (
-    <SignUpForm onSwitchToSignIn={() => setShowSignIn(true)} />
-  );
+	return showSignIn ? (
+		<SignInForm onSwitchToSignUp={() => setShowSignIn(false)} />
+	) : (
+		<SignUpForm onSwitchToSignIn={() => setShowSignIn(true)} />
+	);
 }

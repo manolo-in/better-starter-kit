@@ -5,6 +5,8 @@ type CloudflareBinding = {
   // CHAT: DurableObjectNamespace
 };
 
+type WaitUntil = (p: Promise<unknown>) => void
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv extends CloudflareBindings {

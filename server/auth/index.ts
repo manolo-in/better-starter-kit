@@ -4,17 +4,25 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { env } from "env";
 
-export const createAuth = (db: CreatedDB) =>
+export const trustedOrigins = [
+	env.CORS_ORIGIN ?? "",
+].filter((o) => o.length > 0);
+
+export const createAuth = (
+	db: CreatedDB,
+	baseURL: string,
+	waitUntil: WaitUntil,
+) =>
   betterAuth({
     secret: env.AUTH_SECRET,
-    baseURL: env.AUTH_URL,
+    baseURL,
     session: {
       cookieCache: {
         enabled: true,
         maxAge: 5 * 60, // Cache duration in seconds
       },
     },
-    trustedOrigins: [env.CORS_ORIGIN || ""],
+    trustedOrigins,
     database: drizzleAdapter(db, {
       provider: "sqlite",
       schema,
@@ -28,7 +36,11 @@ export const createAuth = (db: CreatedDB) =>
         clientId: env.GOOGLE_CLIENT_ID,
         clientSecret: env.GOOGLE_CLIENT_SECRET,
       },
-    },
+	  },
+
+			onAPIError: {
+				errorURL: "/error",
+			},
     plugins: [],
   });
 

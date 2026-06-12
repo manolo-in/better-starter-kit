@@ -72,3 +72,5 @@ dist/
 # Development
 .yarn/
 .wrangler
+
+public/*
